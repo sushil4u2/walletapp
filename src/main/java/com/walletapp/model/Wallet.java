@@ -30,8 +30,7 @@ public class Wallet {
 	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id")
 	private User user;
-	private String mobile;
-	private String passwordHash;
+	private double balance;
 	private boolean isActive;
     @CreatedDate
     private Date created;

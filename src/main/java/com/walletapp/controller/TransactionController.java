@@ -18,22 +18,15 @@ import com.walletapp.util.Constants;
 import lombok.extern.slf4j.Slf4j;
 
 @RestController
-@RequestMapping(path = Constants.USER)
+@RequestMapping(Constants.TRANSACTION)
 @Slf4j
-public class UserController {
+public class TransactionController {
 
 	@Autowired
 	private UserService userService;
 	
-	@GetMapping(path = "/ping")
-	ApiResponse<String> getUser() {
-		System.out.println("here");
-		return new ApiResponse<>("pong", HttpStatus.OK.value());
-	}
-	
 	@GetMapping("/{userId}")
 	ApiResponse<User> getUser(@PathVariable Long userId) {
-		System.out.println("here");
 		Optional<User> user = userService.findUserById(userId);
 		log.debug("got user = {} for userId = {}", user, userId);
 		if(user.isPresent())  
