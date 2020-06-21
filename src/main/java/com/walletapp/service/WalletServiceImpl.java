@@ -38,6 +38,7 @@ public class WalletServiceImpl implements WalletService {
 		Optional<Wallet> wallet = walletRepository.findById(walletId);
 		transactionService.saveTransaction(walletId, money, Status.PENDING);
 		if(!wallet.isPresent()) {
+			log.error("wallet {} not found ", walletId);
 			transactionService.saveTransaction(walletId, money, Status.FAILED);
 			throw new WalletNotFoundException("wallet not found");
 		}
@@ -53,6 +54,7 @@ public class WalletServiceImpl implements WalletService {
 		Optional<Wallet> wallet = walletRepository.findById(walletId);
 		transactionService.saveTransaction(walletId, money, Status.PENDING);
 		if(!wallet.isPresent()) {
+			log.error("wallet {} not found ", walletId);
 			transactionService.saveTransaction(walletId, money, Status.FAILED);
 			throw new WalletNotFoundException("wallet not found");
 		}

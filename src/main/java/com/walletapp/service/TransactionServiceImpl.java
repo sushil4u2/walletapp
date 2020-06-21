@@ -4,10 +4,14 @@ import java.time.LocalDate;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import com.walletapp.exceptions.TransactionNotFoundException;
+import com.walletapp.exceptions.UserNotFoundException;
 import com.walletapp.model.Transaction;
 import com.walletapp.repository.TransactionRepository;
+import com.walletapp.util.ApiResponse;
 import com.walletapp.util.Status;
 
 import lombok.extern.slf4j.Slf4j;
@@ -25,7 +29,10 @@ public class TransactionServiceImpl implements TransactionService {
 	
 	@Override
 	public Optional<Transaction> findTransactionById(Long transactionId) {
-		return transactionRepository.findById(transactionId);
+		Optional<Transaction> transaction = transactionRepository.findById(transactionId);
+		if(!transaction.isPresent())  
+			throw new TransactionNotFoundException("User is not present");
+		return transaction;
 	}
 
 	@Override

@@ -28,13 +28,8 @@ import lombok.extern.slf4j.Slf4j;
 public class WalletController {
 
 	@Autowired
-	private UserService userService;
-	@Autowired
 	private WalletService walletService;
-	@Autowired
-	private TransactionService transactionService;
 	
-
 	@PutMapping("/credit")
 	ApiResponse<Wallet> creditToWallet(long walletId, double money){
 		Optional<Wallet> updatedWallet = walletService.creditToWallet(walletId, money);
@@ -49,8 +44,8 @@ public class WalletController {
 	
 	@PutMapping("/transferMoney")
 	ApiResponse<String> transferMoney(long fromWalletId, long toWalletId, double money){
+		log.info("transfering money {} from wallet {} to wallet", money, fromWalletId, toWalletId);
 		walletService.transferMoney(fromWalletId, toWalletId, money);
-		
 		return new ApiResponse<>("success", HttpStatus.OK.value());
 	}
 }
