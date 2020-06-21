@@ -31,11 +31,17 @@ public class Wallet {
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	@Column(name = "wallet_id")
 	private Long walletId;
+	
 	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id")
 	private User user;
-	@OneToMany(mappedBy = "wallet", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	private List<Transaction> transactions = new ArrayList<Transaction>();
+	
+	@OneToMany(mappedBy = "fromWallet", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private List<Transaction> fromTransactions = new ArrayList<Transaction>();
+	
+	@OneToMany(mappedBy = "toWallet", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private List<Transaction> toTransactions = new ArrayList<Transaction>();
+	
 	private double balance;
 	private boolean isActive;
     @CreatedDate

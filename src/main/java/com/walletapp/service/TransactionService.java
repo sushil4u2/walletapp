@@ -9,5 +9,5 @@ import com.walletapp.util.Status;
 public interface TransactionService {
 
 	Optional<Transaction> findTransactionById(Long transactionId);
-	void saveTransaction(long walletId, double money, Status status);
+	void saveTransaction(long fromWalletId, long toWalletId, double money, Status status);
 }

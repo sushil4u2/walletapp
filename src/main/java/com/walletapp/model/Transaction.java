@@ -3,6 +3,7 @@ package com.walletapp.model;
 import java.time.LocalDate;
 import java.util.Date;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -28,9 +29,16 @@ public class Transaction {
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private Long transactionId;
+	
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "wallet_id")
-	private Wallet wallet;
+	@JoinColumn(name = "wallet_id", insertable=false, updatable=false)
+	private Wallet fromWallet;
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "wallet_id", insertable=false, updatable=false)
+	private Wallet toWallet;
+	
+	private double money;
 	private Status status;
-    private LocalDate created;
+    private LocalDate created_at;
 }

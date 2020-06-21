@@ -36,11 +36,13 @@ public class TransactionServiceImpl implements TransactionService {
 	}
 
 	@Override
-	public void saveTransaction(long walletId, double money, Status status) {
+	public void saveTransaction(long fromWalletId, long toWalletId, double money, Status status) {
 		Transaction transaction = new Transaction();
-		transaction.getWallet().setWalletId(walletId);
+		transaction.getFromWallet().setWalletId(fromWalletId);
+		transaction.getToWallet().setWalletId(toWalletId);
+		transaction.setMoney(money);
 		transaction.setStatus(status);
-		transaction.setCreated(LocalDate.now());
+		transaction.setCreated_at(LocalDate.now());
 		transactionRepository.save(transaction);
 	}
 

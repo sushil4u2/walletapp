@@ -36,26 +36,21 @@ public class WalletServiceImpl implements WalletService {
 	@Override
 	public Optional<Wallet> creditToWallet(long walletId, double money) {
 		Optional<Wallet> wallet = walletRepository.findById(walletId);
-		transactionService.saveTransaction(walletId, money, Status.PENDING);
 		if(!wallet.isPresent()) {
 			log.error("wallet {} not found ", walletId);
-			transactionService.saveTransaction(walletId, money, Status.FAILED);
 			throw new WalletNotFoundException("wallet not found");
 		}
 		double newBalance = wallet.get().getBalance() + money;
 		wallet.get().setBalance(newBalance);
 		walletRepository.save(wallet);
-		transactionService.saveTransaction(walletId, money, Status.SUCCESS);
 		return wallet;
 	}
 
 	@Override
 	public Optional<Wallet> debitFromWallet(long walletId, double money) {
 		Optional<Wallet> wallet = walletRepository.findById(walletId);
-		transactionService.saveTransaction(walletId, money, Status.PENDING);
 		if(!wallet.isPresent()) {
 			log.error("wallet {} not found ", walletId);
-			transactionService.saveTransaction(walletId, money, Status.FAILED);
 			throw new WalletNotFoundException("wallet not found");
 		}
 		else if(wallet.get().getBalance() < money)
@@ -63,16 +58,20 @@ public class WalletServiceImpl implements WalletService {
 		double newBalance = wallet.get().getBalance() - money;
 		wallet.get().setBalance(newBalance);
 		walletRepository.save(wallet);
-		transactionService.saveTransaction(walletId, money, Status.SUCCESS);
 		return wallet;
 	}
 
 	@Override
-	@Transactional
 	public void transferMoney(long fromWalletId, long toWalletId, double money) {
+		transactionService.saveTransaction(fromWalletId, toWalletId, money, Status.PENDING);
+		transferMoneyUtil(fromWalletId, toWalletId, money);
+		transactionService.saveTransaction(fromWalletId, toWalletId, money, Status.SUCCESS);
+	}
+	
+	@Transactional
+	public void transferMoneyUtil(long fromWalletId, long toWalletId, double money) {
 		debitFromWallet(fromWalletId, money);
 		creditToWallet(toWalletId, money);
 	}
-	
 	
 }

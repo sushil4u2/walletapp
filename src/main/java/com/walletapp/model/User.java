@@ -34,5 +34,5 @@ public class User {
 	private String passwordHash;
 	private boolean isActive;
     @CreatedDate
-    private Date created;
+    private Date created_at;
 }
