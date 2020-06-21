@@ -1,5 +1,6 @@
 package com.walletapp.model;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 import javax.persistence.Entity;
@@ -11,6 +12,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 import org.springframework.data.annotation.CreatedDate;
+
+import com.walletapp.util.Status;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -26,11 +29,8 @@ public class Transaction {
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private Long transactionId;
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "user_id")
-	private User user;
-	private String mobile;
-	private String passwordHash;
-	private boolean isActive;
-    @CreatedDate
-    private Date created;
+	@JoinColumn(name = "wallet_id")
+	private Wallet wallet;
+	private Status status;
+    private LocalDate created;
 }

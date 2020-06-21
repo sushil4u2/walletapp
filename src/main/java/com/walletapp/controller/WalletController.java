@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.walletapp.exceptions.UserNotFoundException;
 import com.walletapp.model.User;
 import com.walletapp.model.Wallet;
+import com.walletapp.service.TransactionService;
 import com.walletapp.service.UserService;
 import com.walletapp.service.WalletService;
 import com.walletapp.util.ApiResponse;
@@ -30,6 +31,8 @@ public class WalletController {
 	private UserService userService;
 	@Autowired
 	private WalletService walletService;
+	@Autowired
+	private TransactionService transactionService;
 	
 
 	@PutMapping("/credit")
@@ -47,6 +50,7 @@ public class WalletController {
 	@PutMapping("/transferMoney")
 	ApiResponse<String> transferMoney(long fromWalletId, long toWalletId, double money){
 		walletService.transferMoney(fromWalletId, toWalletId, money);
+		
 		return new ApiResponse<>("success", HttpStatus.OK.value());
 	}
 }

@@ -34,8 +34,6 @@ public class User {
 	private String mobile;
 	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private Wallet wallet;
-	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	private List<Transaction> transactions = new ArrayList<Transaction>();
 	private String passwordHash;
 	private boolean isActive;
     @CreatedDate

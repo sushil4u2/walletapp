@@ -12,6 +12,7 @@ import com.walletapp.model.User;
 import com.walletapp.model.Wallet;
 import com.walletapp.repository.UserRepository;
 import com.walletapp.repository.WalletRepository;
+import com.walletapp.util.Status;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -20,6 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 public class WalletServiceImpl implements WalletService {
 
 	private WalletRepository walletRepository;
+	private TransactionService transactionService;
 	
 	@Autowired
 	public WalletServiceImpl(WalletRepository walletRepository){
@@ -34,24 +36,32 @@ public class WalletServiceImpl implements WalletService {
 	@Override
 	public Optional<Wallet> creditToWallet(long walletId, double money) {
 		Optional<Wallet> wallet = walletRepository.findById(walletId);
-		if(!wallet.isPresent())
+		transactionService.saveTransaction(walletId, money, Status.PENDING);
+		if(!wallet.isPresent()) {
+			transactionService.saveTransaction(walletId, money, Status.FAILED);
 			throw new WalletNotFoundException("wallet not found");
+		}
 		double newBalance = wallet.get().getBalance() + money;
 		wallet.get().setBalance(newBalance);
 		walletRepository.save(wallet);
+		transactionService.saveTransaction(walletId, money, Status.SUCCESS);
 		return wallet;
 	}
 
 	@Override
 	public Optional<Wallet> debitFromWallet(long walletId, double money) {
 		Optional<Wallet> wallet = walletRepository.findById(walletId);
-		if(!wallet.isPresent())
+		transactionService.saveTransaction(walletId, money, Status.PENDING);
+		if(!wallet.isPresent()) {
+			transactionService.saveTransaction(walletId, money, Status.FAILED);
 			throw new WalletNotFoundException("wallet not found");
+		}
 		else if(wallet.get().getBalance() < money)
 			throw new InsufficientBalanceException("Insufficient balance in the account");
 		double newBalance = wallet.get().getBalance() - money;
 		wallet.get().setBalance(newBalance);
 		walletRepository.save(wallet);
+		transactionService.saveTransaction(walletId, money, Status.SUCCESS);
 		return wallet;
 	}
 
